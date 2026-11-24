@@ -1,0 +1,21 @@
+name: Check
+
+on:
+  [push, pull_request]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install rust toolchain
+        run: rustup toolchain install stable
+      - name: Log versions
+        run: rustc --version && cargo clippy --version && cargo fmt --version
+      - name: Clone repository
+        uses: actions/checkout@v7
+      - name: Run cargo fmt
+        run: cargo fmt --check
+      - name: Run cargo clippy
+        run: cargo clippy -- -D warnings
+      - name: Run cargo test
+        run: cargo test
